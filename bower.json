@@ -1,0 +1,30 @@
+{
+  "name": "xmr",
+  "main": "bin/www",
+  "version": "0.0.0",
+  "homepage": "https://github.com/Zolomon/xmr",
+  "authors": [
+    "Bengt Ericsson <zolomon@gmail.com>"
+  ],
+  "description": "Exam studying app, without overwhelming feelings",
+  "moduleType": [
+    "node"
+  ],
+  "keywords": [
+    "exam",
+    "studying",
+    "success"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.2.0"
+  }
+}
