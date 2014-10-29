@@ -11,7 +11,6 @@ router.get('/', function(req, res) {
 			length: courses.length
 		});
 	});
-  //res.render('index', { title: 'Xmr' });
 });
 
 module.exports = router;

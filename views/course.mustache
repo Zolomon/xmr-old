@@ -30,14 +30,26 @@
     <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
     <h2>{{length}}</h2>
 
+    <h2>{{course.code}}</h2>
+
     <table class="table table-condensed">
-      {{#courses}}
+      {{#course.Exams}}
         <tr>
           <td>{{ id }}</td>
-          <td><a href="course/{{ id }}/">{{ code }}</a></td>
-          <td>{{ name }}</td>
+          <td><a href="/course/{{ id }}/">{{ code }}</a></td>
+          <td>
+            <table class="table table-condensed">
+            {{#Problems}}
+              <tr>
+                <td><a href="/course/{{ id }}/">{{ Question.filename }}</a></td>
+                <td><a href="/course/{{ id }}/">{{ Answer.filename }}</a></td>
+              </tr>
+            {{/Problems}}
+            </table>
+
+          </td>
         </tr>
-      {{/courses}}
+      {{/course.Exams}}
     </table>
   </div>
 
@@ -48,7 +60,7 @@
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="../javascripts/xmr.min.js"></script>
+<script src="/javascripts/xmr.min.js"></script>
 </body>
 
 {{>foot}}
