@@ -1,0 +1,7 @@
+extends layout
+
+block content
+	h1 Existing Tags
+
+	each tag in tags
+		a(href='/tag/' + tag.slug) #{tag.title}
