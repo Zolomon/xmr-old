@@ -4,13 +4,25 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res) {
-	models.Course.findAll().success(function (courses) {
-		res.render('index', {
-			title: 'Xmr',
-			courses: courses,
-			length: courses.length
-		});
-	});
+    models.Course.findAll({
+        include: [{
+            model: models.Exam,
+            include: [{
+                model: models.Problem,
+                include: [{
+                    model: models.Answer
+                }, {
+                    model: models.Question
+                }]
+            }]
+        }]
+    }).success(function(courses) {
+        console.log(courses);
+        res.render('index', {
+            title: 'Xmr',
+            courses: courses
+        });
+    });
 });
 
 module.exports = router;

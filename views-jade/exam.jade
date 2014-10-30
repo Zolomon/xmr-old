@@ -1,0 +1,20 @@
+extends layout
+
+block content
+	h1=exam.code
+
+	h2 Problems
+	ul
+	each problem in exam.Problems
+		li
+			a(href='/course/' + course.id) #{course.code}
+			img(src=#{problem.Question.filename})
+			if problem.Answer
+				img(src=#{problem.Answer.filename})
+			//- ul
+			//- 	each exam in course.Exams
+			//- 		li
+			//- 			a(href="/course/" +course.id + "/" + exam.id + "/") #{exam.code}
+			
+
+

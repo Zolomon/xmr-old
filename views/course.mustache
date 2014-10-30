@@ -41,8 +41,8 @@
             <table class="table table-condensed">
             {{#Problems}}
               <tr>
-                <td><a href="/course/{{ id }}/">{{ Question.filename }}</a></td>
-                <td><a href="/course/{{ id }}/">{{ Answer.filename }}</a></td>
+                <td><img src="/public/{{ Question.filename }}" style="width:100px;"/></td>
+                <td><img src="/public/{{ Answer.filename }}" style="width:100px;"/></td>
               </tr>
             {{/Problems}}
             </table>

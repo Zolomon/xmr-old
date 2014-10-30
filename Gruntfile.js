@@ -2,24 +2,41 @@ module.exports = function(grunt) {
 
     grunt.initConfig({
         distDir: 'dist/',
+
         jsDir: 'public/javascripts/',
         jsDistDir: 'dist/javascripts/',
+
         cssDir: 'public/stylesheets/',
         cssDistDir: 'dist/stylesheets/',
+
         fontDistDir: 'dist/fonts/',
+
+        imgDir: 'public/images/courses/**/*',
+        imgDistDir: 'dist/images/',
+
         pkg: grunt.file.readJSON('package.json'),
         copy: {
             main: {
-                files: [{
+                expand: true,
+                files: [
+                    /*{
                     src: 'bower_components/bootstrap/dist/js/*',
                     dest: '<%=jsDistDir%>'
                 }, {
                     src: 'bower_components/bootstrap/dist/css/*',
                     dest: '<%=cssDistDir%>'
-                }, {
-                    src: 'bower_components/bootstrap/dist/fonts/*',
-                    dest: '<%=fontDistDir%>'
-                }]
+                }, */
+                    {
+                        src: 'bower_components/bootstrap/dist/fonts/*',
+                        dest: '<%=fontDistDir%>'
+                    }
+                ]
+            },
+            images: {
+                src: ['**/*'],
+                expand: true,
+                cwd: 'public/images/',
+                dest: 'dist/images/'
             }
         },
         concat: {
@@ -124,8 +141,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
 
     grunt.registerTask('default', [
-        'copy',
         'concat',
+        'copy',
         'uglify',
         'cssmin',
         'imagemin',

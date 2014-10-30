@@ -4,7 +4,8 @@ var fs = require('fs'),
     config = require(path.join(__dirname, 'config', 'config.json'))[env],
     Sequelize = require('sequelize'),
     sequelize = new Sequelize(config.database, config.username, config.password, config),
-    models = require('./models');
+    models = require('./models'),
+    _ = require('lodash');
 
 fs
     .readdirSync('./public/images/courses/')
@@ -22,74 +23,89 @@ fs
             if (foundCourse === null) {
                 createCourse(filename);
             } else {
-                console.log("The course " + filename + " already exists.");
+                //console.log("The course " + filename + " already exists.");
                 lookupExam(filename, foundCourse);
             }
         });
     });
 
 function createCourse(filename) {
-    console.log("The course " + filename + " doesn't exist. Let's create it.");
+    //console.log("The course " + filename + " doesn't exist. Let's create it.");
 
     models.Course.create({
         code: filename
     }).success(function(newCourse) {
         // With the new course created:
         // public/images/courses/eda040
-        console.log(path.join(__dirname, 'public', 'images', 'courses', filename));
+        //console.log(path.join(__dirname, 'public', 'images', 'courses', filename));
 
         lookupExam(filename, newCourse);
     });
 }
 
 function lookupExam(filename, sqlCourse) {
-	console.log('lookupProblem(' + filename + ")");
+    //console.log('lookupProblem(' + filename + ")");
     // For every exam type folder in this course: 
     // public/images/courses/eda040/{exams, solutions}
-    fs.readdirSync(path.join(__dirname, 'public', 'images', 'courses', filename))
-        .forEach(function(examType) {
+    var folders = fs.readdirSync(path.join(__dirname, 'public', 'images', 'courses', filename));
+    var filteredFolders = _.filter(folders, function(x) {
+        return x === 'exams' || x === 'solutions';
+    });
 
-            if (examType === 'exams' || examType === 'solutions') {
-            	console.log("ExamType:" + examType);
-                // For every exam folder in 'exams' or 'solutions'
-                // public/images/courses/eda040/{exams,solutions}/<date>
-                fs.readdirSync(
-                    path.join(__dirname, 'public', 'images', 'courses', filename, examType)
-                ).forEach(function(examDate) {
-                    console.log("Exam date: " + examDate);
+    if (filteredFolders.length === 2) {
+        //if (examType === 'exams' || examType === 'solutions') {
+        // For every exam folder in 'exams' or 'solutions'
+        // public/images/courses/eda040/{exams,solutions}/<date>
 
-                    // Check if the current exam already exists in the database.
-                    models.Exam.find({
-                        where: {
-                            code: examDate
-                        }
-                    }).success(function(foundExam) {
-                        if (foundExam === null) {
-                            console.log("Exam " + path.join(filename, examType, examDate) + " doesn't exist. Let's create it.");
-                            if (filename === null || filename === undefined) {
-                            	console.log("lookupExam(): null === filename");
-                            }
-                            if (examType === null || examType === undefined) {
-                            	console.log("lookupExam(): null === filename");
-                            }
-                            if (examDate === null || examDate === undefined) {
-                            	console.log("lookupExam(): null === filename");
-                            }
-                            if (sqlCourse === null || sqlCourse === undefined) {
-                            	console.log("lookupExam(): null === filename");
-                            }
-                            createExam(filename, examType, examDate, sqlCourse);
-                        } else {
-                            console.log("Exam already exists");
-                            // So the current exam exists, but maybe there are new files in this dir? 
-                            lookupProblem(filename, examType, examDate, sqlCourse, foundExam);
-                        }
-                    });
-                });
-            } else {
-                console.log("Please remove: " + path.join(__dirname, 'public', 'images', 'courses', filename, examType));
-            }
+        var examFolders = fs.readdirSync(path.join(__dirname, 'public', 'images', 'courses', filename, 'exams'));
+        var solutionFolders = fs.readdirSync(path.join(__dirname, 'public', 'images', 'courses', filename, 'solutions'));
+
+        // Find exams with solutions:
+        var examsWithSolutions = _.intersection(examFolders, solutionFolders);
+
+        examFolders.forEach(function(examDate) {
+            models.Exam.find({
+                where: {
+                    code: examDate
+                }
+            }).success(function(foundExam) {
+                var examType = _.contains(solutionFolders, examDate) ? ['exams', 'solutions'] : ['exams'];
+
+                if (foundExam === null) {
+                    createExam(filename, examType, examDate, sqlCourse);
+                } else {
+                    lookupProblem(filename, examType, examDate, sqlCourse, foundExam);
+                }
+            });
         });
+
+
+        /*fs.readdirSync(
+            path.join(__dirname, 'public', 'images', 'courses', filename, examType)
+        ).forEach(function(examDate) {
+            console.log("Exam date: " + examDate);
+
+            // Check if the current exam already exists in the database.
+            models.Exam.find({
+                where: {
+                    code: examDate
+                }
+            }).success(function(foundExam) {
+                if (foundExam === null) {
+                    console.log("Exam " + path.join(filename, examType, examDate) + " doesn't exist. Let's create it.");
+                    createExam(filename, examType, examDate, sqlCourse);
+                } else {
+                    console.log("Exam already exists");
+                    // So the current exam exists, but maybe there are new files in this dir? 
+                    lookupProblem(filename, examType, examDate, sqlCourse, foundExam);
+                }
+            });
+        });*/
+    }
+    //else {
+    //console.log("Please remove: " + path.join(__dirname, 'public', 'images', 'courses', filename, examType));
+    //}
+    //});
 }
 
 function createExam(filename, examType, examDate, sqlCourse) {
@@ -97,38 +113,51 @@ function createExam(filename, examType, examDate, sqlCourse) {
         code: examDate
     }).success(function(newExam) {
         newExam.setCourse(sqlCourse);
-        console.log("Created exam");
+        //console.log("Created exam");
         lookupProblem(filename, examType, examDate, sqlCourse, newExam);
     });
 }
 
 function lookupProblem(filename, examType, examDate, sqlCourse, sqlExam) {
-	console.log('lookupProblem(filename=' + filename + ", examType=" + examType + ", examDate=" + examDate + ")");
-    console.log('Adding ' + examDate + ' to ' + sqlCourse);
+    //console.log('lookupProblem(filename=' + filename + ", examType=" + examType + ", examDate=" + examDate + ")");
+    //console.log('Adding ' + examDate + ' to ' + sqlCourse);
     var index = 0;
 
     // For every problem in 
+    // public/images/courses/eda040/{exams,solutions}/<date>/
+    // which will give 
     // public/images/courses/eda040/{exams,solutions}/<date>/<img>
     fs.readdirSync(
-        path.join(__dirname, 'public', 'images', 'courses', filename, examType, examDate)
-    ).forEach(function(problem) {
-        var imgpath = path.join(__dirname, 'public', 'images', 'courses', filename, examType, examDate, problem);
-        console.log(imgpath);
+        path.join(__dirname, 'public', 'images', 'courses', filename, 'exams', examDate)
+    ).forEach(function(img) {
+        var imgpath = path.join(__dirname, 'public', 'images', 'courses', filename, 'exams', examDate, img);
+        //console.log(imgpath);
 
-        models.Problem.find({
-            index: index
-        }).success(function(foundProblem) {
-            if (foundProblem === null) {
-                console.log("Problem " + path.join(filename, examType, examDate, problem) + " didn't exist. Let's create it");
-                createProblem(filename, examType, examDate, problem, index, sqlCourse, sqlExam);
-            } else {
-                console.log("Problem already exists.");
-                lookupQuestion(filename, examType, examDate, problem, sqlCourse, sqlExam, foundProblem);
-                lookupAnswer(filename, examType, examDate, problem, sqlCourse, sqlExam, foundProblem);
-            }
+        /*models.Problem.find({
+            where: {
+                'Questions.filename': imgpath
+            },
+            include: [{
+                model: models.Question,
+                as: models.Question.tableName
+            }]
+            //index: index
+        }).success(function(foundProblem) {*/
+            //if (foundProblem === null) {
+                //console.log("Problem " + path.join(filename, 'exams', examDate, img) + " didn't exist. Let's create it");
+                createProblem(filename, examType, examDate, img, index, sqlCourse, sqlExam);
+            /*} else {
+                //console.log("Problem already exists.");
+                if (_.contains(examType, 'exams')) {
+                    lookupQuestion(filename, 'exams', examDate, img, sqlCourse, sqlExam, foundProblem);
+                }
+                if (_.contains(examType, 'solutions')) {
+                    lookupAnswer(filename, 'exams', examDate, img, sqlCourse, sqlExam, foundProblem);
+                }
+            }*/
 
             // Increase the problem index;
-        });
+        //});
         index++;
     });
 }
@@ -141,30 +170,32 @@ function createProblem(filename, examType, examDate, problem, index, sqlCourse, 
         // Assign the problem to the current exam
         newProblem.setExam(sqlExam);
 
-        if (examType === 'exams') {
-            models.Question.find({
-                where: {
-                    filename: path.join('images', 'courses', filename, examType, examDate, problem)
-                }
-            }).success(function(foundQuestion) {
-                if (foundQuestion === null) {
-                    createQuestion(filename, examType, examDate, problem, sqlCourse, sqlExam, newProblem);
-                } else {
-                    console.log("Question " + path.join('images', 'courses', filename, examType, examDate, problem) + " already exists.");
-                    //foundQuestion.setProblem(newProblem);
-                }
-            });
-        } else if (examType === 'solutions') {
+        // There will always be an exam question.
+        models.Question.find({
+            where: {
+                filename: path.join('images', 'courses', filename, 'exams', examDate, problem)
+            }
+        }).success(function(foundQuestion) {
+        	console.log('####################################################################')
+            if (foundQuestion === null) {
+                createQuestion(filename, 'exams', examDate, problem, sqlCourse, sqlExam, newProblem);
+            } else {
+                //console.log("Question " + path.join('images', 'courses', filename, 'exams', examDate, problem) + " already exists.");
+                //foundQuestion.setProblem(newProblem);
+            }
+        });
+
+        // Check if we have a solution.
+        if (_.contains(examType, 'solutions')) {
             models.Answer.find({
                 where: {
-                    filename: path.join('images', 'courses', filename, examType, examDate, problem)
+                    filename: path.join('images', 'courses', filename, 'solutions', examDate, problem)
                 }
             }).success(function(foundAnswer) {
                 if (foundAnswer === null) {
-                    createAnswer(filename, examType, examDate, problem, sqlCourse, sqlExam, newProblem);
+                    createAnswer(filename, 'solutions', examDate, problem, sqlCourse, sqlExam, newProblem);
                 } else {
-                    console.log("Answer " + path.join('images', 'courses', filename, examType, examDate, problem) + " already exists.");
-                    //foundAnswer.setProblem(newProblem);
+                    console.log("Answer " + path.join('images', 'courses', filename, 'solutions', examDate, problem) + " already exists.");
                 }
             });
         }
@@ -172,17 +203,17 @@ function createProblem(filename, examType, examDate, problem, index, sqlCourse, 
 }
 
 function lookupQuestion(filename, examType, examDate, problem, sqlCourse, sqlExam, sqlProblem) {
-	models.Question.find({
-		where: {
-			filename: path.join('images', 'courses', filename, examType, examDate, problem)
-		}
-	}).success(function (foundQuestion) {
-		if (foundQuestion === null) {
-			createQuestion(filename, examType, examDate, problem, sqlCourse, sqlExam, sqlProblem);
-		} else {
-			console.log("Question " + path.join('images', 'courses', filename, examType, examDate, problem) + " already exists.");
-		}
-	});
+    models.Question.find({
+        where: {
+            filename: path.join('images', 'courses', filename, examType, examDate, problem)
+        }
+    }).success(function(foundQuestion) {
+        if (foundQuestion === null) {
+            createQuestion(filename, examType, examDate, problem, sqlCourse, sqlExam, sqlProblem);
+        } else {
+            console.log("Question " + path.join('images', 'courses', filename, examType, examDate, problem) + " already exists.");
+        }
+    });
 }
 
 function createQuestion(filename, examType, examDate, problem, sqlCourse, sqlExam, sqlProblem) {
@@ -197,17 +228,18 @@ function createQuestion(filename, examType, examDate, problem, sqlCourse, sqlExa
 }
 
 function lookupAnswer(filename, examType, examDate, problem, sqlCourse, sqlExam, sqlProblem) {
-	models.Answer.find({
-		where: {
-			filename: path.join('images', 'courses', filename, examType, examDate, problem)
-		}
-	}).success(function (foundAnswer) {
-		if (foundAnswer === null) {
-			createAnswer(filename, examType, examDate, problem, sqlCourse, sqlExam, sqlProblem);
-		} else {
-			console.log("Answer " + path.join('images', 'courses', filename, examType, examDate, problem) + " already exists.");
-		}
-	});
+    console.log("Answer " + path.join('images', 'courses', filename, examType, examDate, problem) + " didn't exist. Let's create it");
+    models.Answer.find({
+        where: {
+            filename: path.join('images', 'courses', filename, examType, examDate, problem)
+        }
+    }).success(function(foundAnswer) {
+        if (foundAnswer === null) {
+            createAnswer(filename, examType, examDate, problem, sqlCourse, sqlExam, sqlProblem);
+        } else {
+            console.log("Answer " + path.join('images', 'courses', filename, examType, examDate, problem) + " already exists.");
+        }
+    });
 }
 
 function createAnswer(filename, examType, examDate, problem, sqlCourse, sqlExam, sqlProblem) {

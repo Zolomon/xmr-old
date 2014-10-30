@@ -6,9 +6,11 @@ var bodyParser = require('body-parser');
 /* GET home page. */
 router.get('/', function(req, res) {
     models.Course.findAll().success(function(courses) {
-        res.render('form', {
-            title: 'Xmr'
-        });
+        res.redirect('/');
+        /*res.render('index', {
+            title: 'Xmr',
+            courses: courses
+        });*/
     });
 });
 
@@ -29,31 +31,36 @@ router.get('/:course_id', function(req, res) {
             }]
         }]
     }).success(function(course) {
-        /*models.Exam.findAll({
-            where: {
-                CourseId: req.param('course_id')
-            }
-        }).success(function(exams) {
-            console.log("Found exams: " + exams);
-            exams.forEach(function(exam) {
-                models.Problem.findAll({
-                    where: {
-                        ExamId: exam.id
-                    }
-                }).success(function(problems) {
-
-                    res.render('course', {
-                        course: course,
-                        problems: problems
-                    });
-                });
-            });
-        });*/
         console.log(JSON.stringify(course));
         res.render('course', {
             course: course
         });
 
+    });
+});
+
+router.get('/:course_id/:exam_id', function(req, res) {
+    models.Course.find({
+        where: {
+            id: req.param('course_id')
+        },
+        include: [{
+            model: models.Exam,
+            as: 'Exam',
+            include: [{
+                model: models.Problem,
+                include: [{
+                    model: models.Answer
+                }, {
+                    model: models.Question
+                }]
+            }]
+        }]
+    }).success(function(course) {
+        res.render('exam', {
+            course: course,
+            exam: course.Exams[0]
+        });
     });
 });
 

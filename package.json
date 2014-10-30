@@ -20,7 +20,9 @@
     "grunt-contrib-jshint": "~0.10.0",
     "sequelize-cli": "~0.3.3",
     "sequelize": "~2.0.0-rc1",
-    "config": "~1.6.0"
+    "config": "~1.6.0",
+    "lodash": "~2.4.1",
+    "jade": "~1.7.0"
   },
   "devDependencies": {
     "grunt": "~0.4.5",
