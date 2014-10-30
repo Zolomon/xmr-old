@@ -52,6 +52,8 @@ router.get('/:course_id/exam/:exam_id/problem/:problem_index', function(req, res
         include: includes.Courses()
     }).success(function(course) {
         //var exam = _.sample(course.Exams);
+
+        
         var exam = _.where(course.Exams, {
             'id': req.param('exam_id')
         })[0];
