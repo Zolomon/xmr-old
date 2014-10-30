@@ -8,6 +8,8 @@
             classMethods: {
                 associate: function(models) {
                     Tag.belongsTo(models.Problem);
+                    Tag.belongsTo(models.Exam);
+                    Tag.belongsTo(models.Course);
                 }
             }
         });
