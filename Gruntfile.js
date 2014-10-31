@@ -26,11 +26,17 @@ module.exports = function(grunt) {
                     src: 'bower_components/bootstrap/dist/css/*',
                     dest: '<%=cssDistDir%>'
                 }, */
-                    {
-                        src: 'bower_components/bootstrap/dist/fonts/*',
-                        dest: '<%=fontDistDir%>'
-                    }
+                    // {
+                    //     src: 'bower_components/bootstrap/dist/fonts/*',
+                    //     dest: '<%=fontDistDir%>'
+                    // }
                 ]
+            },
+            fonts: {
+                src: ['**/*'],
+                expand: true,
+                cwd: 'bower_components/bootstrap/dist/fonts/',
+                dest: 'dist/fonts/'
             },
             images: {
                 src: ['**/*'],

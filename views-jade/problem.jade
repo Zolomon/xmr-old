@@ -3,15 +3,18 @@ extends layout
 block content
 	h1=course.code
 	h2=exam.code
+	a(href='/random/#{course.id}/problem/') Random problem
 	h3 Tags
 	#tags
-		ul.inline
-		each tag in problem.Tags
-			li
-				a(href='/tag/all/#{tag.slug}')=tag.title
-	a(href='/random/#{course.id}/problem/') Random problem
+		ul.list-inline
+			each tag in problem.Tags
+				li
+					a(href='/tag/all/#{tag.slug}').btn.btn-xs.btn-primary=tag.title
+					a(href='/tag/remove/#{problem.id}').btn.btn-xs.btn-danger
+						span.glyphicon.glyphicon-remove
 	include addTag
+	hr
 	h3 Question
 	img(src='/'+problem.Question.filename)#question
 	h3 Answer
-	img(src='/'+problem.Answer.filename)#answer
+	//- img(src='/'+problem.Answer.filename)#answer

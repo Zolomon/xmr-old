@@ -1,6 +1,8 @@
 doctype html
 html
 	body
-		block content
-		link(rel='stylesheet', href='/stylesheets/xmr.min.css')
-		script(src='/javascripts/xmr.min.js')
+		include header
+		div.container
+			block content
+			link(rel='stylesheet', href='/stylesheets/xmr.min.css')
+			script(src='/javascripts/xmr.min.js')
