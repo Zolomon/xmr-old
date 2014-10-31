@@ -31,42 +31,14 @@ router.get('/:course_id/problem/', function(req, res) {
 router.get('/:course_id/exam/:exam_id/problem/:problem_index', function(req, res) {
     models.Course.find({
         where: {
-            id: req.param('course_id')
-            //,
-            //'Exam.id': req.param('exam_id'),
-            //'Problem.index': req.param('problem_index')
+            id: req.param('course_id'),
+            'Exams.id': req.param('exam_id'),
+            'Exams.Problems.index': req.param('problem_index')
         },
-        /*include: [{
-            model: models.Exam,
-            as: 'Exam',
-            include: [{
-                model: models.Problem,
-                as: 'Problem',
-                include: [{
-                    model: models.Answer
-                }, {
-                    model: models.Question
-                }]
-            }]
-        }]*/
         include: includes.Courses()
     }).success(function(course) {
-        //var exam = _.sample(course.Exams);
-
-        
-        var exam = _.where(course.Exams, {
-            'id': req.param('exam_id')
-        })[0];
-
-        console.log(exam);
-        var problem = _.where(exam.Problems, {
-            'id': req.param('problem_index')
-        })[0];
-
-        console.log(exam);
-        console.log(problem);
-        console.log(problem.Question);
-        console.log(problem.Answer);
+        var exam = course.Exams[0];
+        var problem = exam.Problems[0];
 
         res.render('problem', {
             course: course,

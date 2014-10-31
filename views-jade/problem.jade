@@ -4,7 +4,7 @@ block content
 	h1=course.code
 	h2=exam.code
 	a(href='/random/#{course.id}/problem/') Random problem
-	br
-	img(src=problem.Question.filename)#question
-	br
-	img(src=problem.Answer.filename)#answer
+	h3 Question
+	img(src='/'+problem.Question.filename)#question
+	h3 Answer
+	img(src='/'+problem.Answer.filename)#answer
