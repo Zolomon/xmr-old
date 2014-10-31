@@ -19,12 +19,6 @@ router.get('/:course_id/problem/', function(req, res) {
         var problem = _.sample(exam.Problems);
 
         res.redirect('/random/' + course.id + '/exam/' + exam.id + '/problem/' + problem.index);
-
-        /*		res.render('problem', {
-			course: course,
-			exam: exam,
-			problem: problem
-		});*/
     });
 });
 

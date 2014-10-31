@@ -35,9 +35,9 @@ router.get('/:course_id/:exam_id', function(req, res) {
         include: includes.Courses()
     }).success(function(course) {
         // Validate parameters
-	res.render('exam', {
+        res.render('exam', {
             course: course,
-            exam: course.Exams[Number(req.param('exam_id'))-1]
+            exam: course.Exams[Number(req.param('exam_id')) - 1]
         });
     });
 });

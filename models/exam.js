@@ -10,6 +10,7 @@
                 associate: function(models) {
                     Exam.belongsTo(models.Course);
                     Exam.hasMany(models.Problem);
+                    Exam.hasMany(models.Tag);
                 }
             }
         });
