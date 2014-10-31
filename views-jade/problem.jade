@@ -3,7 +3,14 @@ extends layout
 block content
 	h1=course.code
 	h2=exam.code
+	h3 Tags
+	#tags
+		ul.inline
+		each tag in problem.Tags
+			li
+				a(href='/tag/all/#{tag.slug}')=tag.title
 	a(href='/random/#{course.id}/problem/') Random problem
+	include addTag
 	h3 Question
 	img(src='/'+problem.Question.filename)#question
 	h3 Answer

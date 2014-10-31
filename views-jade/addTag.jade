@@ -1,0 +1,8 @@
+form(action='/tag/add', method='post').form-inline
+	#form-group
+		#input-group
+			label(for='tag').sr-only Tag:
+			input(type='hidden', name='problem_id', value='#{problem.id}')
+			input(type='text', name='tag', id='tag').form-control.input-sm
+			| &nbsp;
+			button(type='submit', name='submit', value='Add tag').btn.btn-primary.btn-sm Add tag
