@@ -17,6 +17,15 @@ router.get('/all', function(req, res) {
     });
 });
 
+router.get('/remove/:problem_id/:tag_id', function(req, res) {
+    models.Tag.find({
+        where: {
+            id: Number(req.param('tag_id'))
+        }
+    })
+});
+
+
 router.get('/destroy/:tag_id', function(req, res) {
     console.log(req.param('tag_id'));
     models.Tag.find({
@@ -53,8 +62,6 @@ router.post('/add', function(req, res) {
             res.redirect('back');
         });
     });
-
-
 });
 
 module.exports = router;
