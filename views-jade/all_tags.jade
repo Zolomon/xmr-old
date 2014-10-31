@@ -3,5 +3,13 @@ extends layout
 block content
 	h1 Existing Tags
 
-	each tag in tags
-		a(href='/tag/' + tag.slug) #{tag.title}
+	#tags
+		ul.list-unstyled
+			each tag in tags
+				li
+					ul.list-inline
+						li
+							a(href='/tag/destroy/#{tag.id}').btn.btn-primary.btn-xs
+								span.glyphicon.glyphicon-remove
+						li
+							a(href='/tag/#{tag.slug}')=tag.title
