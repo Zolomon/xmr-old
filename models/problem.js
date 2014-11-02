@@ -10,7 +10,7 @@
                     Problem.belongsTo(models.Exam);
                     Problem.hasOne(models.Question);
                     Problem.hasOne(models.Answer);
-                    Problem.hasMany(models.Tag);
+                    Problem.hasMany(models.TagLink);
                 }
             }
         });

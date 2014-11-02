@@ -12,7 +12,12 @@ Include.prototype.Courses = function() {
             }, {
                 model: models.Question
             }, {
-                model: models.Tag
+                model: models.TagLink,
+                include: [{
+                    model: models.Tag
+                }, {
+                    model: models.Problem
+                }]
             }]
         }]
     }];

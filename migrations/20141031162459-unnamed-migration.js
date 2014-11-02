@@ -2,7 +2,8 @@
 
 module.exports = {
     up: function(migration, DataTypes, done) {
-        migration.dropTable('Tags').createTable('Tags', {
+        migration.dropTable('Tags');
+        migration.createTable('Tags', {
             id: {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
@@ -27,7 +28,7 @@ module.exports = {
                 type: DataTypes.INTEGER
             },
             ProblemId: {
-                type: DataTypes.Integer
+                type: DataTypes.INTEGER
             }
         }).done();
     },

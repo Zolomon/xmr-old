@@ -24,7 +24,8 @@
     "sequelize-cli": "~0.3.3",
     "serve-favicon": "~2.1.3",
     "slug": "^0.8.0",
-    "sqlite3": "~3.0.2"
+    "sqlite3": "~3.0.2",
+    "jslint": "~0.6.5"
   },
   "devDependencies": {
     "grunt": "~0.4.5",
