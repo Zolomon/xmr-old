@@ -1,0 +1,26 @@
+extends layout
+
+block content
+	a(href='/tag/all') All tags
+
+	h1 Problems with #{tag.title}
+
+	each course in courses
+		h2 #{course.code} #{course.id}
+
+
+		if (course.Exams)
+			each exam in course.Exams
+				h3=exam.code
+				each problem in exam.Problems
+					a(href='/problem/#{course.id}/#{exam.id}/#{problem.id}') #{problem.id}
+					| &nbsp;
+
+		//- each problem in problems
+		//- 	li
+		//- 		ul.list-inline
+		//- 			a(href='/tag/remove/#{problem.TagLinks[0].id}').btn.btn-danger.btn-xs
+		//- 				span.glyphicon.glyphicon-remove
+		//- 			//- a(href='/problem/#{problem.TagLinks[0].Problem.id}').btn.btn-primary.btn-xs
+		//- 			a(href='/problem/#{course.id}/#{exam.id}/#{problem.id}').btn.btn-primary.btn-xs
+		//- 				span /problem/#{problem.id}

@@ -101,14 +101,24 @@ module.exports = function(grunt) {
             }
         },
         watch: {
-            files: ['<%=jsDir%>*.js', '<%=cssDir%>*.css'],
-            tasks: [
-                'copy',
-                'concat',
-                'uglify',
-                'cssmin',
-                'jshint'
-            ]
+            main: {
+                files: ['<%=jsDir%>*.js', '<%=cssDir%>*.css'],
+                tasks: [
+                    'copy',
+                    'concat',
+                    'uglify',
+                    'cssmin',
+                    'jshint'
+                ]
+            },
+            express: {
+                files: ['routes/*.js','app.js','models/*.js','views-jade/*','public/**/*', '*.js'],
+                tasks: ['express:dev'],
+                options: {
+                    spawn: false // for grunt-contrib-watch v0.5.0+, "nospawn: true" for lower versions. Without this option specified express won't be reloaded
+                }
+
+            }
         },
         imagemin: {
             options: {

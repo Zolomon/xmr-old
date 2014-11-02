@@ -9,7 +9,7 @@ block content
 				li
 					ul.list-inline
 						li
-							a(href='/tag/destroy/#{tag.id}').btn.btn-primary.btn-xs
+							a(href='/tag/destroy/#{tag.id}').btn.btn-danger.btn-xs
 								span.glyphicon.glyphicon-remove
-						li
-							a(href='/tag/#{tag.slug}')=tag.title
+							a(href='/tag/#{tag.slug}').btn.btn-primary.btn-xs
+								span=tag.title

@@ -10,6 +10,7 @@ var users = require('./routes/users');
 var course = require('./routes/course');
 var tag = require('./routes/tag');
 var random = require('./routes/random');
+var problem = require('./routes/problem');
 
 var app = express();
 
@@ -35,6 +36,7 @@ app.use('/users', users);
 app.use('/course', course);
 app.use('/tag', tag);
 app.use('/random', random);
+app.use('/problem', problem);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

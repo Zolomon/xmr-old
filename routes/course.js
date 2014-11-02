@@ -32,7 +32,7 @@ router.get('/:course_id/:exam_id', function(req, res) {
         where: {
             id: req.param('course_id')
         },
-        include: includes.Courses()
+        include: include.Courses()
     }).success(function(course) {
         // Validate parameters
         res.render('exam', {

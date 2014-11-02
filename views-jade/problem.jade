@@ -7,11 +7,12 @@ block content
 	h3 Tags
 	#tags
 		ul.list-inline
-			each tag in problem.Tags
+			each taglink in problem.TagLinks
 				li
-					a(href='/tag/all/#{tag.slug}').btn.btn-xs.btn-primary=tag.title
-					a(href='/tag/remove/#{problem.id}').btn.btn-xs.btn-danger
+					a(href='/tag/remove/#{taglink.id}').btn.btn-xs.btn-danger
 						span.glyphicon.glyphicon-remove
+					a(href='/tag/#{taglink.Tag.slug}').btn.btn-xs.btn-primary=taglink.Tag.title
+					
 	include addTag
 	hr
 	h3 Question

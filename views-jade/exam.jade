@@ -7,10 +7,10 @@ block content
 	ul
 	each problem in exam.Problems
 		li
-			a(href='/course/' + course.id) #{course.code}
-			img(src=#{problem.Question.filename})
-			if problem.Answer
-				img(src=#{problem.Answer.filename})
+			a(href="/problem/#{course.id}/#{exam.id}/#{problem.id}")=problem.id
+				each taglink in problem.TagLinks
+					| &nbsp;
+					a(href="/tag/#{taglink.Tag.slug}")=taglink.Tag.title
 			//- ul
 			//- 	each exam in course.Exams
 			//- 		li
