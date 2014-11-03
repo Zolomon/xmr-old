@@ -12,10 +12,14 @@ block content
 			each problem in exam.Problems				
 				li
 					a(href='/problem/#{course.id}/#{exam.id}/#{problem.id}') #{problem.id}
-				ul.list-inline
-					each taglink in problem.TagLinks
+					if (problem.TagLinks && problem.TagLinks.length > 0)
+						|  - 
+					//- ul.list-inline
+					each taglink,index in problem.TagLinks
 						if (taglink.Tag)
-							li(style='padding-left:1em;') 
-								a(href='/tag/#{taglink.Tag.slug}')=taglink.Tag.title
+							//li(style='padding-left:1em;') 
+							a(href='/tag/#{taglink.Tag.slug}')=taglink.Tag.title
+							if (index != problem.TagLinks.length - 1)
+								| , 
 
 
