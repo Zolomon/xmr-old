@@ -11,9 +11,26 @@ router.get('/', function(req, res) {
 });
 
 router.get('/all', function(req, res) {
-    models.Tag.findAll().success(function(tags) {
+    // models.Tag.findAll().success(function(tags) {
+    //     res.render('all_tags', {
+    //         tags: tags
+    //     });
+    // });
+
+    models.Course.findAll({
+        include: includes.Courses()
+    }).success(function(courses) {
+        /*    courses = _.where(courses, function (course) {
+            return course.Exams && course.
+        });*/
+        console.log(JSON.stringify(courses, null, 2));
+        /*courses = _.where(courses, function(x) {
+            return courses.Exams;
+        });*/
+        console.log(JSON.stringify(courses, null, 2));
+        console.log(courses);
         res.render('all_tags', {
-            tags: tags
+            courses: courses
         });
     });
 });
@@ -42,7 +59,7 @@ router.get('/:tag_slug', function(req, res) {
 
             console.log(courses);
 
-/*            courses.forEach(function (course) {
+            /*            courses.forEach(function (course) {
                 if (course && course.Exams) {
                     course.Exams.forEach(function(exam) {
                         if (exam && exam.Problems) {
@@ -53,7 +70,7 @@ router.get('/:tag_slug', function(req, res) {
                     });
                 }
             });*/
-            
+
             res.render('problems_by_tag', {
                 courses: courses,
                 tag: theTag
@@ -87,6 +104,30 @@ router.get('/remove/:taglink_id', function(req, res) {
 
 
 router.get('/destroy/:tag_id', function(req, res) {
+    // Destroy all links
+    models.TagLink.findAll({
+        where: {
+            'Tag.id': req.param('tag_id')
+        },
+        include: [{
+            model: models.Tag
+        }]
+    }).success(function(taglinks) {
+        //taglinks.destroy()
+        console.log(taglinks);
+        taglinks.forEach(function(taglink) {
+            models.TagLink.find({
+                where: {
+                    id: taglink.id
+                }
+            }).success(function(taglink) {
+                taglink.destroy().sucess(function() {
+                    console.log('Removed taglink for ' + taglink.Tag.slug);
+                });
+            });
+        });
+    });
+
     console.log(req.param('tag_id'));
     models.Tag.find({
         where: {
