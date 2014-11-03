@@ -20,15 +20,19 @@ router.get('/all', function(req, res) {
     models.Course.findAll({
         include: includes.Courses()
     }).success(function(courses) {
-        /*    courses = _.where(courses, function (course) {
-            return course.Exams && course.
-        });*/
-        console.log(JSON.stringify(courses, null, 2));
-        /*courses = _.where(courses, function(x) {
-            return courses.Exams;
-        });*/
-        console.log(JSON.stringify(courses, null, 2));
-        console.log(courses);
+        courses = _.map(courses, function(course) {
+            if (course.Exams)
+                return {course: course, tags: _.uniq(_.flatten(_.map(course.Exams, function(exam) {
+                    if (exam.Problems)
+                        return _.flatten(_.map(exam.Problems, function(problem) {
+                            return problem.TagLinks;
+                        }));
+                    return undefined;
+                })), function(taglink) {
+                    return taglink.Tag.id;
+                })};
+            return {course: course, tags: undefined};
+        });
         res.render('all_tags', {
             courses: courses
         });
