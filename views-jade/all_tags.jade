@@ -5,42 +5,16 @@ block content
 
 	#tags
 		ul.list-unstyled
-			each course in courses
-				h2 Course: #{course.code}
-				each exam in course.Exams
-					//- h2 Exam: #{exam.code}
-					each problem in exam.Problems
-						//- p Problem: #{problem.id}
-						//- ul.list-inline.list-unstyled
-						ul
-						each taglink in problem.TagLinks
+			each courseTag in courses
+				li
+					h2 #{courseTag.course.code}						
+					ul.list-unstyled
+						each taglink in courseTag.tags
 							li
-								ul.list-inline
+								ul.list-inline.unstyled
 									li
 										a(href='/tag/destroy/#{taglink.Tag.id}').btn.btn-danger.btn-xs
 											span.glyphicon.glyphicon-remove
+										|  
 										a(href='/tag/#{taglink.Tag.slug}').btn.btn-primary.btn-xs
 											span=taglink.Tag.title
-							//- li=taglink.Tag.title
-					//- each exam in course.Exams
-					//- 	h3 Exam: #{exam.code}
-					//- 		each problem in exam
-					//- 			p Problem: #{problem.id}
-								//- each taglink in problem.TagLinks
-									//- span=taglink.Tag.title
-									//- li
-									//- 	ul.list-inline
-									//- 		li
-									//- 			a(href='/tag/destroy/#{taglink.Tag.id}').btn.btn-danger.btn-xs
-									//- 				span.glyphicon.glyphicon-remove
-									//- 			a(href='/tag/#{taglink.Tag.slug}').btn.btn-primary.btn-xs
-									//- 				span=taglink.Tag.title
-
-			//- each tag in tags
-			//- 	li
-			//- 		ul.list-inline
-			//- 			li
-			//- 				a(href='/tag/destroy/#{tag.id}').btn.btn-danger.btn-xs
-			//- 					span.glyphicon.glyphicon-remove
-			//- 				a(href='/tag/#{tag.slug}').btn.btn-primary.btn-xs
-			//- 					span=tag.title
