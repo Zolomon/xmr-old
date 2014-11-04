@@ -21,17 +21,53 @@ router.get('/all', function(req, res) {
         include: includes.Courses()
     }).success(function(courses) {
         courses = _.map(courses, function(course) {
-            if (course.Exams)
-                return {course: course, tags: _.uniq(_.flatten(_.map(course.Exams, function(exam) {
-                    if (exam.Problems)
-                        return _.flatten(_.map(exam.Problems, function(problem) {
-                            return problem.TagLinks;
-                        }));
-                    return undefined;
-                })), function(taglink) {
-                    return taglink.Tag.id;
-                })};
-            return {course: course, tags: undefined};
+            var hashmap = {};
+
+            if (course.Exams) {
+                return {
+                    course: course,
+                    TagLinks: _.uniq(
+                        _.filter(
+                            _.map(
+                                _.flatten(
+                                    _.map(course.Exams, function(exam) {
+                                        if (exam.Problems) {
+                                            // For each exam, flatten problems
+                                            return _.flatten(_.map(exam.Problems, function(problem) {
+                                                return problem.TagLinks;
+                                            }));
+                                        }
+                                        return undefined;
+                                    })),
+                                function(taglink) {
+                                    if (taglink.Tag &&
+                                        taglink.Tag.id) {
+                                        if (taglink.Tag.id in hashmap) {
+                                            hashmap[taglink.Tag.id] += 1;
+                                        } else {
+                                            hashmap[taglink.Tag.id] = 1;
+                                        }
+                                    } else {
+                                        console.log("Hashmap error?");
+                                    }
+
+                                    return {
+                                        'taglink': taglink,
+                                        'count': hashmap[taglink.Tag.id]
+                                    };
+                                }
+                            ), function(taglink) {
+                                return taglink !== undefined && taglink.Tag !== undefined;
+                            }),
+                        function(taglink) {
+                            return taglink.Tag.id;
+                        })
+                };
+            }
+            return {
+                course: course,
+                TagLinks: undefined
+            };
         });
         res.render('all_tags', {
             courses: courses
