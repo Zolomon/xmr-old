@@ -5,16 +5,17 @@ block content
 
 	#tags
 		ul.list-unstyled
-			each courseTag in courses
+			each courseWithTags in courses
 				li
-					h2 #{courseTag.course.code}						
+					h2 #{courseWithTags.course.code}						
 					ul.list-unstyled
-						each taglink in courseTag.tags
+						each taglinkWithCount in courseWithTags.TagLinks
 							li
 								ul.list-inline.unstyled
 									li
-										a(href='/tag/destroy/#{taglink.Tag.id}').btn.btn-danger.btn-xs
+										a(href='/tag/destroy/#{taglinkWithCount.TagLink.Tag.id}').btn.btn-danger.btn-xs
 											span.glyphicon.glyphicon-remove
 										|  
-										a(href='/tag/#{taglink.Tag.slug}').btn.btn-primary.btn-xs
-											span=taglink.Tag.title
+										a(href='/tag/#{taglinkWithCount.TagLink.Tag.slug}').btn.btn-primary.btn-xs
+											span=taglinkWithCount.TagLink.Tag.title
+										span=taglinkWithCount.count
