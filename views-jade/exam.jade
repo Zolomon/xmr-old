@@ -1,20 +1,18 @@
 extends layout
 
 block content
-	h1=exam.code
+	each course in courses
+		each exam in course.Exams
+			h1=exam.code
 
-	h2 Problems
-	ul
-	each problem in exam.Problems
-		li
-			a(href="/problem/#{course.id}/#{exam.id}/#{problem.id}")=problem.id
-				each taglink in problem.TagLinks
-					| &nbsp;
-					a(href="/tag/#{taglink.Tag.slug}")=taglink.Tag.title
-			//- ul
-			//- 	each exam in course.Exams
-			//- 		li
-			//- 			a(href="/course/" +course.id + "/" + exam.id + "/") #{exam.code}
-			
+			h2 Problems
+			ul
+			each problem in exam.Problems
+				li
+					a(href="/problem/#{course.id}/#{exam.id}/#{problem.id}")=problem.id
+						each taglink in problem.TagLinks
+							| &nbsp;
+							a(href="/tag/#{taglink.Tag.slug}")=taglink.Tag.title
+					
 
 

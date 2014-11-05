@@ -11,56 +11,52 @@ router.get('/', function(req, res) {
 });
 
 router.get('/all', function(req, res) {
-    // models.Tag.findAll().success(function(tags) {
-    //     res.render('all_tags', {
-    //         tags: tags
-    //     });
-    // });
-
     models.Course.findAll({
         include: includes.Courses()
     }).success(function(courses) {
+        // Create a structure like:
+        // [
+        //   { course: course,
+        //     TagLinks: [{taglink: taglink, count: count}] 
+        //   },
+        // ]
         courses = _.map(courses, function(course) {
             var hashmap = {};
 
             if (course.Exams) {
                 return {
                     course: course,
-                    TagLinks: _.uniq(
-                        _.filter(
-                            _.map(
-                                _.flatten(
-                                    _.map(course.Exams, function(exam) {
-                                        if (exam.Problems) {
-                                            // For each exam, flatten problems
-                                            return _.flatten(_.map(exam.Problems, function(problem) {
-                                                return problem.TagLinks;
-                                            }));
-                                        }
-                                        return undefined;
-                                    })),
-                                function(taglink) {
-                                    if (taglink.Tag &&
-                                        taglink.Tag.id) {
-                                        if (taglink.Tag.id in hashmap) {
-                                            hashmap[taglink.Tag.id] += 1;
-                                        } else {
-                                            hashmap[taglink.Tag.id] = 1;
-                                        }
-                                    } else {
-                                        console.log("Hashmap error?");
+                    TagLinks: _.sortBy(
+                        _.map(
+                            _.flatten(
+                                _.map(course.Exams, function flattenExam(exam) {
+                                    if (exam.Problems) {
+                                        // For each exam, flatten problems
+                                        return _.flatten(_.map(exam.Problems, function(problem) {
+                                            return problem.TagLinks;
+                                        }));
                                     }
-
-                                    return {
-                                        'taglink': taglink,
-                                        'count': hashmap[taglink.Tag.id]
-                                    };
+                                    return undefined;
+                                })),
+                            function addCount(taglink) {
+                                if (taglink.Tag &&
+                                    taglink.Tag.id) {
+                                    if (taglink.Tag.id in hashmap) {
+                                        hashmap[taglink.Tag.id] += 1;
+                                    } else {
+                                        hashmap[taglink.Tag.id] = 1;
+                                    }
+                                } else {
+                                    console.log("Hashmap error?");
                                 }
-                            ), function(taglink) {
-                                return taglink !== undefined && taglink.Tag !== undefined;
-                            }),
-                        function(taglink) {
-                            return taglink.Tag.id;
+
+                                return {
+                                    'taglink': taglink,
+                                    'count': hashmap[taglink.Tag.id]
+                                };
+                            }
+                        ), function sortInDescendingOrder(object) {
+                            return -object.count;
                         })
                 };
             }
@@ -82,35 +78,11 @@ router.get('/:tag_slug', function(req, res) {
         },
         include: includes.Courses()
     }).success(function(courses) {
-        /*courses.forEach(function(course) {
-            console.log(course.title);
-        });*/
-        console.log(courses.length);
-        console.log(JSON.stringify(courses, null, 4));
         models.Tag.find({
             where: {
                 slug: req.param('tag_slug')
             }
         }).success(function(theTag) {
-
-            /*courses = _.where(courses, function(course) {
-                return course.Exams && course.Exams.Problems;
-            });*/
-
-            console.log(courses);
-
-            /*            courses.forEach(function (course) {
-                if (course && course.Exams) {
-                    course.Exams.forEach(function(exam) {
-                        if (exam && exam.Problems) {
-                            exam.Problems.forEach(function(problem) {
-                                console.log(problem);
-                            });
-                        }
-                    });
-                }
-            });*/
-
             res.render('problems_by_tag', {
                 courses: courses,
                 tag: theTag
