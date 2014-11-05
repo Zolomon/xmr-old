@@ -18,7 +18,6 @@ router.get('/:exam_id', function(req, res) {
         },
         include: include.Courses()
     }).success(function(courses) {
-        console.log(courses);
         res.render('exam', {
             courses: courses
         });

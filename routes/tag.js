@@ -97,8 +97,6 @@ router.get('/remove/:taglink_id', function(req, res) {
             id: Number(req.param('taglink_id'))
         }
     }).success(function(taglink) {
-        console.log(taglink);
-
         if (taglink !== null) {
             taglink.destroy().success(function() {
                 res.redirect('back');
@@ -125,8 +123,6 @@ router.get('/destroy/:tag_id', function(req, res) {
             model: models.Tag
         }]
     }).success(function(taglinks) {
-        //taglinks.destroy()
-        console.log(taglinks);
         taglinks.forEach(function(taglink) {
             models.TagLink.find({
                 where: {
@@ -140,7 +136,6 @@ router.get('/destroy/:tag_id', function(req, res) {
         });
     });
 
-    console.log(req.param('tag_id'));
     models.Tag.find({
         where: {
             id: Number(req.param('tag_id'))
