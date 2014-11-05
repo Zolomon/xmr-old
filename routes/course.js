@@ -12,15 +12,12 @@ router.get('/', function(req, res) {
 });
 
 router.get('/:course_id', function(req, res) {
-    console.log(include);
-
     models.Course.find({
         where: {
             id: req.param('course_id')
         },
         include: include.Courses()
     }).success(function(course) {
-        console.log(JSON.stringify(course));
         res.render('course', {
             course: course
         });
@@ -47,7 +44,6 @@ router.post('/', function(req, res) {
         code: req.body.code,
         title: req.body.title
     }).success(function(course) {
-        console.log('Added: ' + course);
         res.redirect('/');
     });
 });
