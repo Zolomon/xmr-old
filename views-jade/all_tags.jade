@@ -13,9 +13,9 @@ block content
 							li
 								ul.list-inline.unstyled
 									li
-										a(href='/tag/destroy/#{taglinkWithCount.TagLink.Tag.id}').btn.btn-danger.btn-xs
+										a(href='/tag/destroy/#{taglinkWithCount.taglink.Tag.id}').btn.btn-danger.btn-xs
 											span.glyphicon.glyphicon-remove
-										|  
-										a(href='/tag/#{taglinkWithCount.TagLink.Tag.slug}').btn.btn-primary.btn-xs
-											span=taglinkWithCount.TagLink.Tag.title
-										span=taglinkWithCount.count
+										span.count.btn.btn-default.disabled.btn-xs=taglinkWithCount.count
+										a(href='/tag/#{taglinkWithCount.taglink.Tag.slug}').btn.btn-primary.btn-xs
+											span=taglinkWithCount.taglink.Tag.title
+										

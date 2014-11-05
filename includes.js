@@ -23,4 +23,22 @@ Include.prototype.Courses = function() {
     }];
 };
 
+Include.prototype.Exams = function() {
+    return [{
+        model: models.Problem,
+        include: [{
+            model: models.Answer
+        }, {
+            model: models.Question
+        }, {
+            model: models.TagLink,
+            include: [{
+                model: models.Tag
+            }, {
+                model: models.Problem
+            }]
+        }]
+    }];
+};
+
 module.exports = new Include();

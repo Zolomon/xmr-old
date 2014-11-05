@@ -27,7 +27,7 @@ router.get('/:course_id', function(req, res) {
     });
 });
 
-router.get('/:course_id/:exam_id', function(req, res) {
+router.get('/:course_id/:exam_index', function(req, res) {
     models.Course.find({
         where: {
             id: req.param('course_id')
@@ -37,7 +37,7 @@ router.get('/:course_id/:exam_id', function(req, res) {
         // Validate parameters
         res.render('exam', {
             course: course,
-            exam: course.Exams[Number(req.param('exam_id')) - 1]
+            exam: course.Exams[Number(req.param('exam_index')) - 1]
         });
     });
 });
