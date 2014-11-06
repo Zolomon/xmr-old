@@ -26,7 +26,7 @@ router.get('/all', function(req, res) {
             if (course.Exams) {
                 return {
                     course: course,
-                    TagLinks: _.sortBy(
+                    TagLinks: _.uniq(_.sortBy(
                         _.map(
                             _.flatten(
                                 _.map(course.Exams, function flattenExam(exam) {
@@ -57,6 +57,8 @@ router.get('/all', function(req, res) {
                             }
                         ), function sortInDescendingOrder(object) {
                             return -object.count;
+                        }), function findUnique(object) {
+                            return object.taglink.Tag.id;
                         })
                 };
             }

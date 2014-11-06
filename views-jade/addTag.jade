@@ -5,6 +5,6 @@ form(action='/tag/add', method='post').form-inline
 			input(type='hidden', name='course_id', value='#{course.id}')
 			input(type='hidden', name='exam_id', value='#{exam.id}')
 			input(type='hidden', name='problem_id', value='#{problem.id}')
-			input(type='text', name='tag', id='tag').form-control.input-sm
+			input(type='text', name='tag', id='tag' autofocus).form-control.input-sm
 			| &nbsp;
 			button(type='submit', name='submit', value='Add tag').btn.btn-primary.btn-sm Add tag
