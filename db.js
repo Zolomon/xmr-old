@@ -26,30 +26,33 @@ function main() {
 
 function addDirectory(courseCode, directory) {
     fs
-    .readdirSync(directory)
-    .forEach(function(filename) {
-        // For each directory in the provided directory
+        .readdirSync(directory)
+        .forEach(function(filename) {
+            // For each directory in the provided directory
 
-        if (courseCode && filename != courseCode) {
-            return;
-        }
-
-        console.log('filename: ' + filename);
-
-        // Find the current course by code
-        models.Course.find({
-            where: {
-                code: filename
+            if (courseCode && filename != courseCode) {
+                return;
             }
-        }).success(function(foundCourse) {
-            if (foundCourse === null) {
-                createCourse(filename);
-            } else {
-                //console.log("The course " + filename + " already exists.");
-                lookupExam(filename, foundCourse);
-            }
+
+            console.log('filename: ' + filename);
+
+            // Find the current course by code
+            models.Course.find({
+                where: {
+                    code: filename
+                }
+            }).success(function(foundCourse) {
+                if (foundCourse === null) {
+                    console.log('Course doesn\'t exist: ' + filename);
+                    createCourse(filename);
+                } 
+                // else {
+                //     //console.log("The course " + filename + " already exists.");
+                //     console.log('Course already exists');
+                //     lookupExam(filename, foundCourse);
+                // }
+            });
         });
-    });
 }
 
 main();
@@ -99,10 +102,13 @@ function lookupExam(filename, sqlCourse) {
                 var examType = _.contains(solutionFolders, examDate) ? ['exams', 'solutions'] : ['exams'];
 
                 if (foundExam === null) {
-                    //createExam(filename, examType, examDate, sqlCourse);
-                } else {
-                    lookupProblem(filename, examType, examDate, sqlCourse, foundExam);
-                }
+                    console.log('Exam wans\'t found: ' + examDate);
+                    createExam(filename, examType, examDate, sqlCourse);
+                } 
+                // else {
+                //     console.log('Exam was found: ' + filename);
+                //     lookupProblem(filename, examType, examDate, sqlCourse, foundExam);
+                // }
             });
         });
     }
