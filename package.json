@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "body-parser": "~1.8.1",
+    "commander": "^2.5.0",
     "config": "~1.6.0",
     "cookie-parser": "~1.3.3",
     "debug": "~2.0.0",
@@ -17,15 +18,16 @@
     "grunt-contrib-jshint": "~0.10.0",
     "hogan-middleware": "0.0.1",
     "jade": "~1.7.0",
+    "jslint": "~0.6.5",
     "lodash": "~2.4.1",
+    "minimist": "^1.1.0",
     "morgan": "~1.3.0",
     "mustache": "~0.8.2",
     "sequelize": "~2.0.0-rc1",
     "sequelize-cli": "~0.3.3",
     "serve-favicon": "~2.1.3",
     "slug": "^0.8.0",
-    "sqlite3": "~3.0.2",
-    "jslint": "~0.6.5"
+    "sqlite3": "~3.0.2"
   },
   "devDependencies": {
     "grunt": "~0.4.5",
