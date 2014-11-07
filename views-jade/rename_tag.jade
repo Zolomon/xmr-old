@@ -1,0 +1,12 @@
+extends layout
+
+block content
+	h1 Rename #{tag.title}
+
+	form(action='/tag/rename', method='post').form-inline
+	#form-group
+		#input-group
+			label(for='tag').sr-only New name:
+			input(type='hidden', name='tag_id', value='#{tag.id}')
+			input(type='text', name='tag_slug', id='tag' autofocus).form-control.input-sm
+			button(type='submit', name='submit', value='Rename tag').btn.btn-primary.btn-sm Rename tag

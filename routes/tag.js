@@ -58,8 +58,8 @@ router.get('/all', function(req, res) {
                         ), function sortInDescendingOrder(object) {
                             return -object.count;
                         }), function findUnique(object) {
-                            return object.taglink.Tag.id;
-                        })
+                        return object.taglink.Tag.id;
+                    })
                 };
             }
             return {
@@ -195,6 +195,32 @@ router.post('/add', function(req, res) {
                     res.redirect('back');
                 });
             }
+        });
+    });
+});
+
+router.get('/rename/:tag_slug', function(req, res) {
+    models.Tag.find({
+        where: {
+            slug: req.param('tag_slug')
+        }
+    }).success(function(tag) {
+        res.render('rename_tag', {
+            tag: tag
+        });
+    });
+});
+
+router.post('/rename', function(req, res) {
+    models.Tag.find({
+        where: {
+            id: req.body.id
+        }
+    }).success(function(tag) {
+        tag.updateAttributes({
+            slug: slugger(req.body.tag)
+        }).success(function() {
+            res.redirect('/tag/all');
         });
     });
 });

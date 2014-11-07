@@ -1,9 +1,7 @@
 extends layout
 
 block content
-	a(href='/tag/all') All tags
-
-	h1 Problems with #{tag.title}
+	h1 Problems with '#{tag.title}'
 
 	each course in courses
 		h2 #{course.code} #{course.id}
@@ -11,7 +9,6 @@ block content
 
 		if (course.Exams)
 			each exam in course.Exams
-				h3=exam.code
-				each problem in exam.Problems
+				each problem, index in exam.Problems
 					a(href='/problem/#{course.id}/#{exam.id}/#{problem.id}') #{problem.id}
-					| &nbsp;
+					|  

@@ -3,7 +3,7 @@ extends layout
 block content
 	h1=course.code
 
-	a(href='/random/#{course.id}/problem/') Random problem from this exam
+	a(href='/random/#{course.id}/problem/') Random problem from this course
 	br
 	each exam in course.Exams
 		a(href='/exam/#{exam.id}') 
@@ -14,7 +14,6 @@ block content
 					a(href='/problem/#{course.id}/#{exam.id}/#{problem.id}') #{problem.id}
 					if (problem.TagLinks && problem.TagLinks.length > 0)
 						|  - 
-					//- ul.list-inline
 					each taglink,index in problem.TagLinks
 						if (taglink.Tag)
 							//li(style='padding-left:1em;') 

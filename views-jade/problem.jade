@@ -14,8 +14,17 @@ block content
 					a(href='/tag/#{taglink.Tag.slug}').btn.btn-xs.btn-primary=taglink.Tag.title
 					
 	include addTag
-	hr
-	h3 Question
-	img(src='/#{problem.Question.filename}')#question
-	h3 Answer
-	img(src='/#{problem.Answer.filename}')#answer
+	div.container
+		h3 Question
+		img(src='/#{problem.Question.filename}').question#question
+
+		script(type='text/javascript').
+			$(document).ready(function () {
+			    $('#answer').click(function () {
+			        $('#answer').toggleClass('visible');
+			    })
+			});
+
+		h3 Answer
+		div.answer_box
+			img(src='/#{problem.Answer.filename}').answer#answer

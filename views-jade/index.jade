@@ -7,11 +7,8 @@ block content
 	ul
 	each course in courses
 		li
-			a(href='/course/' + course.id) #{course.code}
-			ul
-				each exam in course.Exams
-					li
-						a(href="/course/" +course.id + "/" + exam.id + "/") #{exam.code}
+			a(href='/course/' + course.id)
+				h3 #{course.code}
 			
 
 

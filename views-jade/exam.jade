@@ -3,16 +3,22 @@ extends layout
 block content
 	each course in courses
 		each exam in course.Exams
-			h1=exam.code
+			if (course.Exams)
+				h1 #{course.code} - #{exam.code}
+			else
+				h1 #{exam.code}
 
 			h2 Problems
-			ul
+			ul.list-unstyled
 			each problem in exam.Problems
 				li
 					a(href="/problem/#{course.id}/#{exam.id}/#{problem.id}")=problem.id
-						each taglink in problem.TagLinks
-							| &nbsp;
-							a(href="/tag/#{taglink.Tag.slug}")=taglink.Tag.title
+					|  -
+					each taglink, index in problem.TagLinks
+						| &nbsp;
+						a(href="/tag/#{taglink.Tag.slug}")=taglink.Tag.title
+						if (index != problem.TagLinks.length - 1)
+							| , 
 					
 
 
