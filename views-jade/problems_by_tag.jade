@@ -2,6 +2,7 @@ extends layout
 
 block content
 	h1 Problems with '#{tag.title}'
+	a(href='/tag/#{tag.slug}/solution') Problems with solutions
 
 	each course in courses
 		h2 #{course.code} #{course.id}

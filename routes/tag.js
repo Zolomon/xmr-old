@@ -93,6 +93,27 @@ router.get('/:tag_slug', function(req, res) {
     });
 });
 
+router.get('/:tag_slug/solution', function (req, res) {
+    models.Course.findAll({
+        where: {
+            'Exams.Problems.TagLinks.Tag.slug': req.param('tag_slug'),
+            'Exams.Problems.TagLinks.Tag.slug': 'losning',
+        },
+        include: includes.Courses()
+    }).success(function (courses) {
+        models.Tag.find({
+            where: {
+                slug: req.param('tag_slug')
+            }
+        }).success(function(theTag) {
+            res.render('problems_by_tag', {
+                courses: courses,
+                tag: theTag
+            });
+        });
+    });
+});
+
 router.get('/remove/:taglink_id', function(req, res) {
     models.TagLink.find({
         where: {

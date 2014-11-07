@@ -1,11 +1,10 @@
 extends layout
 
 block content
-	h1=course.code
-	h2=exam.code
+	h1 #{course.code}: #{exam.code}
 	a(href='/random/#{course.id}/problem/') Random problem
-	h3 Tags
 	#tags
+		h3 Tags
 		ul.list-inline
 			each taglink in problem.TagLinks
 				li
