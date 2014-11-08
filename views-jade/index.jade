@@ -4,11 +4,8 @@ block content
 	h1=title
 
 	h2 Courses
-	ul
-	each course in courses
-		li
-			a(href='/course/' + course.id)
-				h3 #{course.code}
-			
-
-
+	ul.list-unstyled
+		each course in courses
+			li
+				a(href='/course/' + course.id)
+					h3 #{course.code}
