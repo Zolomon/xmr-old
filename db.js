@@ -25,6 +25,8 @@ function main() {
 }
 
 function addDirectory(courseCode, directory) {
+    console.log('Adding: ' + courseCode);
+
     fs
         .readdirSync(directory)
         .forEach(function(filename) {
@@ -111,6 +113,8 @@ function lookupExam(filename, sqlCourse) {
                 // }
             });
         });
+    } else {
+        console.log('Missing \'exams\' or \'solutions\' folders. Exiting.');
     }
 }
 
