@@ -24,6 +24,7 @@ block content
 			    })
 			});
 
-		h3 Answer
-		div.answer_box
-			img(src='/#{problem.Answer.filename}').answer#answer
+		if (problem.Answer)
+			h3 Answer
+			div.answer_box
+				img(src='/#{problem.Answer.filename}').answer#answer
