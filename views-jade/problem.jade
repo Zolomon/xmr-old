@@ -2,7 +2,12 @@ extends layout
 
 block content
 	h1 #{course.code}: #{exam.code}
-	a(href='/random/#{course.id}/problem/') Random problem
+	a(href='/random/#{course.id}/problem/') Random problem 
+	|  - 
+	button(onclick='small()').btn.btn-warning.btn-xs 50%
+	button(onclick='medium()').btn.btn-warning.btn-xs 75%
+	button(onclick='large()').btn.btn-warning.btn-xs 100%
+
 	#tags
 		h3 Tags
 		ul.list-inline
@@ -13,6 +18,29 @@ block content
 					a(href='/tag/#{taglink.Tag.slug}').btn.btn-xs.btn-primary=taglink.Tag.title
 					
 	include addTag
+
+	script(type='text/javascript').
+		function small() {
+			$(document).ready(function () {
+				$('#question').width('50%');
+				$('#answer').width('50%');
+			});
+		}
+
+		function medium() {
+			$(document).ready(function () {
+				$('#question').width('75%');
+				$('#answer').width('75%');
+			});
+		}
+
+		function large() {
+			$(document).ready(function () {
+				$('#question').width('100%');
+				$('#answer').width('100%');
+			});
+		}
+
 	div.container
 		h3 Question
 		img(src='/#{problem.Question.filename}').question#question
