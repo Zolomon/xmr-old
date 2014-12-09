@@ -23,7 +23,24 @@ npm install
 
 # How to run
 ```bash
-grunt
+grunt --force
+```
+
+# How to add a new course
+```bash
+cd <path to xmr repository>/
+mkdir -p public/images/courses/<course code>/exams
+mkdir -p public/images/courses/<course code>/solutions
+
+# For each exam in a course, do:
+mkdir -p public/images/courses/<course code>/exams/<exam date in YYMMDD>
+mkdir -p public/images/courses/<course code>/solutions/<exam date in YYMMDD>
+
+# Now, place .png files that represent questions every folder in public/images/courses/<course code>/{exams,solutions}/<exam date in YYMMDD>.
+# Use https://github.com/zolomon/exameer-pdf-editor to create .png files, or GIMP.
+
+# Run db.js and add the new course.
+db.js -d <course code>
 ```
 
 Now visit `localhost:3000/` and you should be able to browse the currently available exams used for testing. 
