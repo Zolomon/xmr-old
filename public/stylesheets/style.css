@@ -8,29 +8,30 @@ a {
 }
 
 .question {
-	max-width: 100%;
+  max-width: 100%;
 }
 
 .answer {
-	max-width: 100%;
-    opacity:0;
+  max-width: 100%;
+  opacity:0;
 }
 
 .center {
-	margin-left: auto;
-	margin-right: auto;
-	width: 70%;
-	background-color: #f2f2f2;
+  margin-left: auto;
+  margin-right: auto;
+  width: 70%;
+  background-color: #f2f2f2;
 }
 
 .visible {
-    opacity:1.0;
+  opacity:1.0;
 }
 
 .answer_box {
-    display: block;
-    border: 1px solid #e7e7e7;
-    max-width: 100%;
-    background-color: #f8f8f8;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.15),0 1px 5px rgba(0,0,0,.075);
+  margin: 0 0 35px 0;
+  display: block;
+  border: 1px solid #e7e7e7;
+  max-width: 100%;
+  background-color: #f8f8f8;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.15),0 1px 5px rgba(0,0,0,.075);
 }
